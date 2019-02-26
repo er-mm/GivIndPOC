@@ -12,7 +12,8 @@ export class FirstComponent extends React.Component{
         this.state = {
 			allData:[],
 			like:'like',
-			comments : []
+			comments : [],
+			files:{}
 		};
        
 	  }
@@ -77,6 +78,39 @@ export class FirstComponent extends React.Component{
 		this.setState({comments:this.state.comments});
 	}
 	  
+	_handleSubmit(e) {
+		e.preventDefault();
+		// TODO: do something with -> this.state.file
+	  ;
+	let reader = new FileReader();
+		reader.onloadend = () => {
+			let imagePreviewUrl = reader.result;
+			let obj = {
+				Image : imagePreviewUrl,
+				likes : 0
+			};
+		  this.setState({
+			allData: [...this.state.allData,obj]
+			});
+		}
+	
+		reader.readAsDataURL(this.state.files)
+		console.log('handle uploading-', this.state.files);
+	  }
+	
+	  _handleImageChange(e) {
+		e.preventDefault();
+	  
+		 this.setState({files:e.target.files[0]}); 
+		
+	  }
+
+	  deleteImage(index,e){
+		  let del = this.state.allData;
+		  del.splice(index, 1);
+		  this.setState({allData: del});
+	  }
+
 	render() {
 		console.log('ssssssssssssssssssssss : ',this.state.allData);
 		const renderTodos = this.state.allData.map((data, index) => {
@@ -89,6 +123,7 @@ export class FirstComponent extends React.Component{
 								<span>{data.likes}</span>
 								<button id={index} onClick={this.clickHandle.bind(this,index)}>{this.state.like}</button>
 								<button id={'comm'+index} onClick={this.showComment.bind(this,index)}>comment</button>
+								<button id={'del'+index} onClick={this.deleteImage.bind(this,index)}>Delete</button>
 								<div id={'upComm'+index} style={{display :'none'}}>
 									{this.state.comments[index]}
 								</div>
@@ -104,6 +139,17 @@ export class FirstComponent extends React.Component{
 			});
 		return(
 			<div className="container">
+				<div className="container">
+				Add File : 
+			<form onSubmit={this._handleSubmit.bind(this)}>
+					<input className="fileInput" 
+					type="file" 
+					onChange={this._handleImageChange.bind(this)} />
+					<button className="submitButton" 
+					type="submit" 
+					onClick={this._handleSubmit.bind(this)}>Upload Image</button>
+				</form>
+				</div><br/><br/>
                 <div className="row">
                         
                        {renderTodos}                        
