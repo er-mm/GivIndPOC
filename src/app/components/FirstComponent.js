@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
-//import * as styles from '../../../src/public/main.css';
+//import * as styles from '../../public/main.scss';
 //import fs from 'file-system';
 //const aa = require('file-system');
 
@@ -81,7 +81,7 @@ export class FirstComponent extends React.Component{
 	_handleSubmit(e) {
 		e.preventDefault();
 		// TODO: do something with -> this.state.file
-	  ;
+	  
 	let reader = new FileReader();
 		reader.onloadend = () => {
 			let imagePreviewUrl = reader.result;
@@ -106,24 +106,28 @@ export class FirstComponent extends React.Component{
 	  }
 
 	  deleteImage(index,e){
-		  let del = this.state.allData;
-		  del.splice(index, 1);
-		  this.setState({allData: del});
+			let del = this.state.allData;
+			let com = this.state.comments;
+			del.splice(index, 1);
+			com.splice(index, 1);
+		  this.setState({allData: del, comments:com});
 	  }
 
 	render() {
 		console.log('ssssssssssssssssssssss : ',this.state.allData);
 		const renderTodos = this.state.allData.map((data, index) => {
-			// console.log('data : ',data);
 			  return (
-					
-						<div className="col-sm-2" key={index}>
-                            <img src={data.Image} alt="Italian Trulli" width='100px' height='70px'/>
+					<div className="card col-sm-3 marginAll" key={index}>
+						<div className="imgPreview" >
+                            <img src={data.Image} alt={this.state.files.name ? this.state.files.name : 'Corrupted Image' }/>
+														<button id={'del'+index} onClick={this.deleteImage.bind(this,index)} className="close"><span aria-hidden="true">&times;</span></button>
+										</div>
+										
 							<div>
 								<span>{data.likes}</span>
-								<button id={index} onClick={this.clickHandle.bind(this,index)}>{this.state.like}</button>
-								<button id={'comm'+index} onClick={this.showComment.bind(this,index)}>comment</button>
-								<button id={'del'+index} onClick={this.deleteImage.bind(this,index)}>Delete</button>
+								<button id={index} onClick={this.clickHandle.bind(this,index)} className="btn btn-xs btn-link">{this.state.like}</button>
+								<button id={'comm'+index} onClick={this.showComment.bind(this,index)} className="btn btn-xs btn-link">Comment</button>
+								
 								<div id={'upComm'+index} style={{display :'none'}}>
 									{this.state.comments[index]}
 								</div>
@@ -134,7 +138,8 @@ export class FirstComponent extends React.Component{
 								</div>
 								
 							</div>
-                        </div>
+                        
+												</div>
 				);
 			});
 		return(
@@ -142,7 +147,7 @@ export class FirstComponent extends React.Component{
 				<div className="container">
 				Add File : 
 			<form onSubmit={this._handleSubmit.bind(this)}>
-					<input className="fileInput" 
+					<input className='fileInput'
 					type="file" 
 					onChange={this._handleImageChange.bind(this)} />
 					<button className="submitButton" 
