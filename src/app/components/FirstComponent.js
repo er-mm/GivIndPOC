@@ -11,7 +11,6 @@ export class FirstComponent extends React.Component{
         super();
         this.state = {
 			allData:[],
-			like:'like',
 			comments : [],
 			files:{}
 		};
@@ -42,16 +41,18 @@ export class FirstComponent extends React.Component{
 	clickHandle(index,e){
 		let likeCount = this.state.allData[index];
 		let allNewData = Object.assign({}, this.state);
-		if(document.getElementById('like'+index).textContent == 'like'){
+		let x = document.getElementById('like'+index).querySelectorAll('.heart2')[0].style.fill;
+		if(x == "" || x == "white"){
+			document.getElementById('like'+index).querySelectorAll('.heart2')[0].style.fill = "red";
 			document.getElementById(index).style.display='block';
 			setTimeout(()=>{
 				document.getElementById(index).style.display='none';
 			},1000);
-			document.getElementById('like'+index).textContent = 'dislike';
+			//document.getElementById('like'+index).textContent = 'dislike';
 			allNewData.allData[index].likes = likeCount['likes'] + 1;
 			this.setState(allNewData);
 	}else{
-		document.getElementById('like'+index).textContent = 'like';
+		document.getElementById('like'+index).querySelectorAll('.heart2')[0].style.fill = "white";
 		allNewData.allData[index].likes = likeCount['likes'] - 1;
 			this.setState(allNewData);
 		}
@@ -85,7 +86,8 @@ export class FirstComponent extends React.Component{
 	_handleSubmit(e) {
 		e.preventDefault();
 		// TODO: do something with -> this.state.file
-	  
+		let lenOfData = this.state.allData.length-1;
+		let val = this.state.allData[lenOfData];
 	let reader = new FileReader();
 		reader.onloadend = () => {
 			let imagePreviewUrl = reader.result;
@@ -93,9 +95,23 @@ export class FirstComponent extends React.Component{
 				Image : imagePreviewUrl,
 				likes : 0
 			};
+			function check(lenOfData,obj,data,callback){
+				for(let i=0; i<=lenOfData ; i++){
+					if(data[i].Image == obj.Image)
+					return callback('true');
+					
+				}
+			}
+			var abc = check(lenOfData,obj,this.state.allData, function (isValid){
+				return isValid;
+			});
+			if(abc == 'true'){
+				alert('Same pic Cannot be added');
+			}else{
 		  this.setState({
 			allData: [...this.state.allData,obj]
 			});
+		}
 		}
 	
 		reader.readAsDataURL(this.state.files)
@@ -133,7 +149,12 @@ export class FirstComponent extends React.Component{
 										
 							<div>
 								<span>{data.likes}</span>
-								<button id={'like'+index} onClick={this.clickHandle.bind(this,index)} className="btn btn-xs btn-link">{this.state.like}</button>
+								<button id={'like'+index} onClick={this.clickHandle.bind(this,index)} className="btn btn-xs btn-link">
+								<svg id={'h_'+index} className="heart2" viewBox="0 0 32 29.6">
+  <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+</svg> 
+								</button>
 								<button id={'comm'+index} onClick={this.showComment.bind(this,index)} className="btn btn-xs btn-link">Comment</button>
 								
 								<div id={'upComm'+index} style={{display :'none'}}>
