@@ -11,7 +11,9 @@
     width: 100%;
     height: 100%;
 }
-
+.likeCount {
+  font-size: small;
+}
 .fileInput{
     border-bottom: 4px solid lightgray;
     border-right: 4px solid lightgray;
