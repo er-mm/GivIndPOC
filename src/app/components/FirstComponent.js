@@ -42,12 +42,16 @@ export class FirstComponent extends React.Component{
 	clickHandle(index,e){
 		let likeCount = this.state.allData[index];
 		let allNewData = Object.assign({}, this.state);
-		if(document.getElementById(index).textContent == 'like'){
-			document.getElementById(index).textContent = 'dislike';
+		if(document.getElementById('like'+index).textContent == 'like'){
+			document.getElementById(index).style.display='block';
+			setTimeout(()=>{
+				document.getElementById(index).style.display='none';
+			},1000);
+			document.getElementById('like'+index).textContent = 'dislike';
 			allNewData.allData[index].likes = likeCount['likes'] + 1;
 			this.setState(allNewData);
 	}else{
-		document.getElementById(index).textContent = 'like';
+		document.getElementById('like'+index).textContent = 'like';
 		allNewData.allData[index].likes = likeCount['likes'] - 1;
 			this.setState(allNewData);
 		}
@@ -117,15 +121,19 @@ export class FirstComponent extends React.Component{
 		console.log('ssssssssssssssssssssss : ',this.state.allData);
 		const renderTodos = this.state.allData.map((data, index) => {
 			  return (
-					<div className="card col-sm-3 marginAll" key={index}>
+					<div className="card col-sm-3 marginAll" key={'img_'+index}>
 						<div className="imgPreview" >
-                            <img src={data.Image} alt={this.state.files.name ? this.state.files.name : 'Corrupted Image' }/>
+                            <img src={data.Image} onDoubleClick={this.clickHandle.bind(this,index)} alt={this.state.files.name ? this.state.files.name : 'Corrupted Image' }/>
+														<svg id={index} className="heart" viewBox="0 0 32 29.6">
+  <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+</svg> 
 														<button id={'del'+index} onClick={this.deleteImage.bind(this,index)} className="close"><span aria-hidden="true">&times;</span></button>
 										</div>
 										
 							<div>
 								<span>{data.likes}</span>
-								<button id={index} onClick={this.clickHandle.bind(this,index)} className="btn btn-xs btn-link">{this.state.like}</button>
+								<button id={'like'+index} onClick={this.clickHandle.bind(this,index)} className="btn btn-xs btn-link">{this.state.like}</button>
 								<button id={'comm'+index} onClick={this.showComment.bind(this,index)} className="btn btn-xs btn-link">Comment</button>
 								
 								<div id={'upComm'+index} style={{display :'none'}}>
