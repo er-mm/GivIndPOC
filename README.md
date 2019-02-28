@@ -1,5 +1,5 @@
 # GivIndPOC
-FE Developer
+INSTA POC
 
 http://starlord.hackerearth.com/insta
 upload image : https://codepen.io/hartzis/pen/VvNGZP
