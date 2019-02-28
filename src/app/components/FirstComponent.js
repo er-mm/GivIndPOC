@@ -52,9 +52,20 @@ export class FirstComponent extends React.Component{
 	}
 
 	showComment(index,e){
+		let lenOfData = this.state.allData.length-1;
 		if(document.getElementById('div'+index).style.display == 'none'){
 			document.getElementById('div'+index).style.display = "block";
 			document.getElementById('text'+index).value = '';
+			function check1(lenOfData,index,callback){
+				for(let i=0; i<=lenOfData ; i++){
+					if(i != index)
+					document.getElementById('div'+i).style.display = 'none'
+				}
+				return callback('true');
+			}
+			var abc = check1(lenOfData,index, function (isValid){
+				return isValid;
+			});
 		}else
 			document.getElementById('div'+index).style.display = 'none';
 	}
@@ -64,8 +75,10 @@ export class FirstComponent extends React.Component{
 		
 	// }
 	submitComm(index,e){
-		document.getElementById('div'+index).style.display = 'none';
+		//document.getElementById('div'+index).style.display = 'none';
+		
 		document.getElementById('upComm'+index).style.display = 'block';
+		//document.getElementById('text'+index).value = '';
 		let comm = document.getElementById('text'+index).value;
 		let aa = <div>{comm}</div>;
 		if(this.state.comments[index] == undefined){
@@ -74,6 +87,7 @@ export class FirstComponent extends React.Component{
 			this.state.comments[index] = [...this.state.comments[index],aa];
 		}
 		this.setState({comments:this.state.comments});
+		document.getElementById('text'+index).value = '';
 	}
 	  
 	_handleSubmit(e) {
@@ -144,13 +158,13 @@ export class FirstComponent extends React.Component{
 								c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
 							</svg> 
 						</button>
-						<button id={'comm'+index} onClick={this.showComment.bind(this,index)} className="btn btn-xs btn-link">Comment</button>
+						<button id={'comm'+index} onClick={this.showComment.bind(this,index)} className="btn btn-xs btn-link no-pad"><img className="width-25" src="https://img.icons8.com/ios/50/000000/speech-bubble.png"/></button>
 						<div id={'upComm'+index} style={{display :'none'}}>
 								{this.state.comments[index]}
 						</div>
-						<div id={'div'+index} style={{display :'none'}}>
-								<textarea  id={'text'+index} rows="2" cols="20" name="comment" />
-								<button id={'submit'+index} onClick={this.submitComm.bind(this,index)}>submit</button>
+						<div id={'div'+index} className="relative" style={{display :'none'}}>
+								<textarea className="textArea" id={'text'+index} rows="1" cols="33" name="comment" />
+								<img id={'submit'+index} onClick={this.submitComm.bind(this,index)} className="post-svg" src="https://img.icons8.com/color/48/000000/circled-chevron-right.png"/>
 						</div>
 					</div>
                 </div>

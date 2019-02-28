@@ -1,3 +1,29 @@
+.no-pad {
+    padding: 0px;
+}
+
+.no-pad:hover {
+    border-color: purple;
+}
+.relative {
+    position: relative;
+}
+
+.textArea {
+    border-color: #9c27b0;
+}
+.post-svg {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    padding-bottom: 5px;
+}
+
+.width-25{
+    width: 25px;
+}
+
 .imgPreview {
     position: relative;
  height: 150px;
